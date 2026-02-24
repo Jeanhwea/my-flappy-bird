@@ -1,16 +1,16 @@
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#ifndef __GAME_SCENE_H__
+#define __GAME_SCENE_H__
 
 #include "cocos2d.h"
 
 typedef enum { GAME_STATE_READY = 0, GAME_STATE_PLAYING, GAME_STATE_OVER } GameState;
 
-class HelloWorld : public cocos2d::Scene
+class GameScene : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene* createScene();
     virtual bool init();
-    CREATE_FUNC(HelloWorld);
+    CREATE_FUNC(GameScene);
 
     void update(float dt);
 

@@ -1,16 +1,16 @@
-#include "HelloWorldScene.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 
 const float PIPE_WIDTH = 52.0f;
 const float BIRD_RADIUS = 15.0f;
 
-Scene* HelloWorld::createScene()
+Scene* GameScene::createScene()
 {
-    return HelloWorld::create();
+    return GameScene::create();
 }
 
-bool HelloWorld::init()
+bool GameScene::init()
 {
     if (!Scene::initWithPhysics()) {
         return false;
@@ -92,13 +92,13 @@ bool HelloWorld::init()
     this->addChild(_gameOverLabel, 20);
 
     auto touchListener = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
-    touchListener->onTouchMoved = CC_CALLBACK_2(HelloWorld::onTouchMoved, this);
-    touchListener->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnded, this);
+    touchListener->onTouchBegan = CC_CALLBACK_2(GameScene::onTouchBegan, this);
+    touchListener->onTouchMoved = CC_CALLBACK_2(GameScene::onTouchMoved, this);
+    touchListener->onTouchEnded = CC_CALLBACK_2(GameScene::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto contactListener = EventListenerPhysicsContact::create();
-    contactListener->onContactBegin = CC_CALLBACK_1(HelloWorld::onContactBegin, this);
+    contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
     this->scheduleUpdate();
@@ -106,7 +106,7 @@ bool HelloWorld::init()
     return true;
 }
 
-void HelloWorld::update(float dt)
+void GameScene::update(float dt)
 {
     if (_gameState != GAME_STATE_PLAYING) {
         return;
@@ -159,14 +159,14 @@ void HelloWorld::update(float dt)
     }
 }
 
-bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
+bool GameScene::onTouchBegan(Touch* touch, Event* event)
 {
     return true;
 }
 
-void HelloWorld::onTouchMoved(Touch* touch, Event* event) {}
+void GameScene::onTouchMoved(Touch* touch, Event* event) {}
 
-void HelloWorld::onTouchEnded(Touch* touch, Event* event)
+void GameScene::onTouchEnded(Touch* touch, Event* event)
 {
     if (_gameState == GAME_STATE_READY) {
         _gameState = GAME_STATE_PLAYING;
@@ -180,7 +180,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
     }
 }
 
-bool HelloWorld::onContactBegin(PhysicsContact& contact)
+bool GameScene::onContactBegin(PhysicsContact& contact)
 {
     if (_gameState != GAME_STATE_PLAYING) {
         return false;
@@ -197,7 +197,7 @@ bool HelloWorld::onContactBegin(PhysicsContact& contact)
     return true;
 }
 
-void HelloWorld::spawnPipe()
+void GameScene::spawnPipe()
 {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     float minHeight = 80.0f;
@@ -239,7 +239,7 @@ void HelloWorld::spawnPipe()
     }
 }
 
-void HelloWorld::resetGame()
+void GameScene::resetGame()
 {
     _gameState = GAME_STATE_READY;
     _score = 0;
@@ -257,13 +257,13 @@ void HelloWorld::resetGame()
     _gameOverLabel->setVisible(false);
 }
 
-void HelloWorld::gameOver()
+void GameScene::gameOver()
 {
     _gameState = GAME_STATE_OVER;
     _gameOverLabel->setVisible(true);
 }
 
-void HelloWorld::updateScore()
+void GameScene::updateScore()
 {
     _scoreLabel->setString(StringUtils::format("%d", _score));
 }
