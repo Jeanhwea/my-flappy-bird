@@ -1,0 +1,10 @@
+#ifndef _VERSION_H_
+#define _VERSION_H_
+
+#define VERSION_MAJOR @my-flappy-bird_VERSION_MAJOR@
+#define VERSION_MINOR @my-flappy-bird_VERSION_MINOR@
+#define VERSION_PATCH @my-flappy-bird_VERSION_PATCH@
+
+#define VERSION_STRING "v@my-flappy-bird_VERSION@"
+
+#endif // _VERSION_H_
