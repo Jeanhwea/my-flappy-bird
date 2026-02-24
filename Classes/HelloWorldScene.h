@@ -17,7 +17,7 @@ public:
     CREATE_FUNC(HelloWorld);
 
     virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
-    virtual void BeginContact(b2Contact* contact);
+    virtual void BeginContact(b2Contact *contact);
 
     virtual void update(float dt);
 

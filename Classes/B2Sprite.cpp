@@ -21,115 +21,90 @@
  */
 
 #include "B2Sprite.h"
-#include "support/CCPointExtension.h"
 
 #include "Box2D/Box2D.h"
+#include "support/CCPointExtension.h"
 
-B2Sprite::B2Sprite()
-: m_bIgnoreBodyRotation(false)
-, m_pB2Body(NULL)
-, m_fPTMRatio(0.0f)
-{}
+B2Sprite::B2Sprite() : m_bIgnoreBodyRotation(false), m_pB2Body(NULL), m_fPTMRatio(0.0f) {}
 
 B2Sprite* B2Sprite::create()
 {
     B2Sprite* pRet = new B2Sprite();
-    if (pRet && pRet->init())
-    {
+    if (pRet && pRet->init()) {
         pRet->autorelease();
-    }
-    else
-    {
-        CC_SAFE_DELETE(pRet);
-    }
-    
-    return pRet;
-}
-
-B2Sprite* B2Sprite::createWithTexture(CCTexture2D *pTexture)
-{
-    B2Sprite* pRet = new B2Sprite();
-    if (pRet && pRet->initWithTexture(pTexture))
-    {
-        pRet->autorelease();
-    }
-    else
-    {
+    } else {
         CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
 }
 
-B2Sprite* B2Sprite::createWithTexture(CCTexture2D *pTexture, const CCRect& rect)
+B2Sprite* B2Sprite::createWithTexture(CCTexture2D* pTexture)
 {
     B2Sprite* pRet = new B2Sprite();
-    if (pRet && pRet->initWithTexture(pTexture, rect))
-    {
+    if (pRet && pRet->initWithTexture(pTexture)) {
         pRet->autorelease();
-    }
-    else
-    {
+    } else {
         CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
 }
 
-B2Sprite* B2Sprite::createWithSpriteFrame(CCSpriteFrame *pSpriteFrame)
+B2Sprite* B2Sprite::createWithTexture(CCTexture2D* pTexture, const CCRect& rect)
 {
     B2Sprite* pRet = new B2Sprite();
-    if (pRet && pRet->initWithSpriteFrame(pSpriteFrame))
-    {
+    if (pRet && pRet->initWithTexture(pTexture, rect)) {
         pRet->autorelease();
-    }
-    else
-    {
+    } else {
         CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
 }
 
-B2Sprite* B2Sprite::createWithSpriteFrameName(const char *pszSpriteFrameName)
+B2Sprite* B2Sprite::createWithSpriteFrame(CCSpriteFrame* pSpriteFrame)
 {
     B2Sprite* pRet = new B2Sprite();
-    if (pRet && pRet->initWithSpriteFrameName(pszSpriteFrameName))
-    {
+    if (pRet && pRet->initWithSpriteFrame(pSpriteFrame)) {
         pRet->autorelease();
-    }
-    else
-    {
+    } else {
         CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
 }
 
-B2Sprite* B2Sprite::create(const char *pszFileName)
+B2Sprite* B2Sprite::createWithSpriteFrameName(const char* pszSpriteFrameName)
 {
     B2Sprite* pRet = new B2Sprite();
-    if (pRet && pRet->initWithFile(pszFileName))
-    {
+    if (pRet && pRet->initWithSpriteFrameName(pszSpriteFrameName)) {
         pRet->autorelease();
-    }
-    else
-    {
+    } else {
         CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
 }
 
-B2Sprite* B2Sprite::create(const char *pszFileName, const CCRect& rect)
+B2Sprite* B2Sprite::create(const char* pszFileName)
 {
     B2Sprite* pRet = new B2Sprite();
-    if (pRet && pRet->initWithFile(pszFileName, rect))
-    {
+    if (pRet && pRet->initWithFile(pszFileName)) {
         pRet->autorelease();
+    } else {
+        CC_SAFE_DELETE(pRet);
     }
-    else
-    {
+
+    return pRet;
+}
+
+B2Sprite* B2Sprite::create(const char* pszFileName, const CCRect& rect)
+{
+    B2Sprite* pRet = new B2Sprite();
+    if (pRet && pRet->initWithFile(pszFileName, rect)) {
+        pRet->autorelease();
+    } else {
         CC_SAFE_DELETE(pRet);
     }
 
@@ -184,7 +159,7 @@ b2Body* B2Sprite::getB2Body() const
     return m_pB2Body;
 }
 
-void B2Sprite::setB2Body(b2Body *pBody)
+void B2Sprite::setB2Body(b2Body* pBody)
 {
     m_pB2Body = pBody;
     pBody->SetUserData(this);
@@ -206,10 +181,10 @@ void B2Sprite::updatePosFromPhysics()
     b2Vec2 pos = m_pB2Body->GetPosition();
     float x = pos.x * m_fPTMRatio;
     float y = pos.y * m_fPTMRatio;
-    m_obPosition = ccp(x,y);
+    m_obPosition = ccp(x, y);
 }
 
-void B2Sprite::setPosition(const CCPoint &pos)
+void B2Sprite::setPosition(const CCPoint& pos)
 {
     float angle = m_pB2Body->GetAngle();
     m_pB2Body->SetTransform(b2Vec2(pos.x / m_fPTMRatio, pos.y / m_fPTMRatio), angle);
@@ -217,18 +192,14 @@ void B2Sprite::setPosition(const CCPoint &pos)
 
 float B2Sprite::getRotation()
 {
-    return (m_bIgnoreBodyRotation ? CCSprite::getRotation() :
-            CC_RADIANS_TO_DEGREES(m_pB2Body->GetAngle()));
+    return (m_bIgnoreBodyRotation ? CCSprite::getRotation() : CC_RADIANS_TO_DEGREES(m_pB2Body->GetAngle()));
 }
 
 void B2Sprite::setRotation(float fRotation)
 {
-    if (m_bIgnoreBodyRotation)
-    {
+    if (m_bIgnoreBodyRotation) {
         CCSprite::setRotation(fRotation);
-    }
-    else
-    {
+    } else {
         b2Vec2 p = m_pB2Body->GetPosition();
         float radians = CC_DEGREES_TO_RADIANS(fRotation);
         m_pB2Body->SetTransform(p, radians);
@@ -238,35 +209,31 @@ void B2Sprite::setRotation(float fRotation)
 // returns the transform matrix according the Box2D Body values
 CCAffineTransform B2Sprite::nodeToParentTransform()
 {
-    b2Vec2 pos  = m_pB2Body->GetPosition();
-	
-	float x = pos.x * m_fPTMRatio;
-	float y = pos.y * m_fPTMRatio;
-	
-	if (m_bIgnoreAnchorPointForPosition)
-    {
-		x += m_obAnchorPointInPoints.x;
-		y += m_obAnchorPointInPoints.y;
-	}
-	
-	// Make matrix
-	float radians = m_pB2Body->GetAngle();
-	float c = cosf(radians);
-	float s = sinf(radians);
-	
-	// Although scale is not used by physics engines, it is calculated just in case
-	// the sprite is animated (scaled up/down) using actions.
-	// For more info see: http://www.cocos2d-iphone.org/forum/topic/68990
-	if (!m_obAnchorPointInPoints.equals(CCPointZero))
-    {
-		x += ((c * -m_obAnchorPointInPoints.x * m_fScaleX) + (-s * -m_obAnchorPointInPoints.y * m_fScaleY));
-		y += ((s * -m_obAnchorPointInPoints.x * m_fScaleX) + (c * -m_obAnchorPointInPoints.y * m_fScaleY));
-	}
-    
-	// Rot, Translate Matrix
-	m_sTransform = CCAffineTransformMake( c * m_fScaleX,	s * m_fScaleX,
-									     -s * m_fScaleY,	c * m_fScaleY,
-									     x,	y );
-	
-	return m_sTransform;
+    b2Vec2 pos = m_pB2Body->GetPosition();
+
+    float x = pos.x * m_fPTMRatio;
+    float y = pos.y * m_fPTMRatio;
+
+    if (m_bIgnoreAnchorPointForPosition) {
+        x += m_obAnchorPointInPoints.x;
+        y += m_obAnchorPointInPoints.y;
+    }
+
+    // Make matrix
+    float radians = m_pB2Body->GetAngle();
+    float c = cosf(radians);
+    float s = sinf(radians);
+
+    // Although scale is not used by physics engines, it is calculated just in case
+    // the sprite is animated (scaled up/down) using actions.
+    // For more info see: http://www.cocos2d-iphone.org/forum/topic/68990
+    if (!m_obAnchorPointInPoints.equals(CCPointZero)) {
+        x += ((c * -m_obAnchorPointInPoints.x * m_fScaleX) + (-s * -m_obAnchorPointInPoints.y * m_fScaleY));
+        y += ((s * -m_obAnchorPointInPoints.x * m_fScaleX) + (c * -m_obAnchorPointInPoints.y * m_fScaleY));
+    }
+
+    // Rot, Translate Matrix
+    m_sTransform = CCAffineTransformMake(c * m_fScaleX, s * m_fScaleX, -s * m_fScaleY, c * m_fScaleY, x, y);
+
+    return m_sTransform;
 }
