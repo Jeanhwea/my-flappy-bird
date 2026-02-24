@@ -5,7 +5,7 @@
 #include "Box2D/Box2D.h"
 #include "B2Sprite.h"
 
-#define RATIO 32
+#define RATIO 48.0f
 
 class HelloWorld : public cocos2d::Scene
 {
