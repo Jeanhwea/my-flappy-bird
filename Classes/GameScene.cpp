@@ -40,7 +40,7 @@ bool GameScene::init()
 
     _ground = Sprite::create("ground.png");
     if (_ground) {
-        float scaleX = _visibleSize.width / _ground->getContentSize().width;
+        float scaleX = _visibleSize.width / _ground->getContentSize().width + 0.1f;
         _ground->setScaleX(scaleX);
         _ground->setAnchorPoint(Vec2(0, 0));
         _ground->setPosition(origin.x, origin.y);
