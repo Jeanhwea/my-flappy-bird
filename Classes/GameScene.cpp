@@ -44,7 +44,7 @@ bool GameScene::init()
         _ground->setScaleX(scaleX);
         _ground->setAnchorPoint(Vec2(0, 0));
         _ground->setPosition(origin.x, origin.y);
-        
+
         auto groundBody = PhysicsBody::createBox(Size(_visibleSize.width, _groundHeight));
         groundBody->setDynamic(false);
         groundBody->setCategoryBitmask(0x02);
@@ -197,7 +197,7 @@ bool GameScene::onContactBegin(PhysicsContact& contact)
 void GameScene::spawnPipe()
 {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    float minHeight = 80.0f;
+    float minHeight = 20.0f;
     float maxHeight = _visibleSize.height - _groundHeight - _pipeGap - minHeight;
     float bottomHeight = minHeight + (rand() % (int)(maxHeight - minHeight));
 
