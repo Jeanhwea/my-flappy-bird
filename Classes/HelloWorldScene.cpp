@@ -27,8 +27,7 @@ bool HelloWorld::init()
         return false;
     }
 
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    screenSize = Director::getInstance()->getVisibleSize();
 
     initWorld();
     addBird();
@@ -38,6 +37,8 @@ bool HelloWorld::init()
     setTouchEnabled(true);
 
     scheduleOnce(schedule_selector(HelloWorld::startGame), 3);
+
+    return true;
 }
 
 void HelloWorld::initWorld()

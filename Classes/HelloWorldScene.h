@@ -2,6 +2,10 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "Box2D/Box2D.h"
+#include "B2Sprite.h"
+
+#define RATIO 32
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -16,15 +20,15 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 
-    virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
+    virtual void ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
     virtual void BeginContact(b2Contact *contact);
 
     virtual void update(float dt);
 
     b2World *world;
     B2Sprite *bird;
-    CCSize screenSize;
-    CCSprite *barContainer;
+    cocos2d::Size screenSize;
+    cocos2d::Sprite *barContainer;
 
 private:
     void addBird();
