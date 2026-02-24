@@ -38,23 +38,19 @@ bool GameScene::init()
     _pipeContainer = Node::create();
     this->addChild(_pipeContainer, 0);
 
-    _ground = Node::create();
-    auto groundBody = PhysicsBody::createBox(Size(_visibleSize.width, _groundHeight));
-    groundBody->setDynamic(false);
-    groundBody->setCategoryBitmask(0x02);
-    groundBody->setCollisionBitmask(0x01);
-    groundBody->setContactTestBitmask(0x01);
-    _ground->setPhysicsBody(groundBody);
-    _ground->setPosition(origin.x, origin.y);
-    this->addChild(_ground, 10);
-
-    auto groundSprite = Sprite::create("ground.png");
-    if (groundSprite) {
-        float scaleX = _visibleSize.width / groundSprite->getContentSize().width;
-        groundSprite->setScale(scaleX, 1.0f);
-        groundSprite->setAnchorPoint(Vec2(0, 0));
-        groundSprite->setPosition(origin.x, origin.y);
-        this->addChild(groundSprite, 9);
+    _ground = Sprite::create("ground.png");
+    if (_ground) {
+        float scaleX = _visibleSize.width / _ground->getContentSize().width;
+        _ground->setScaleX(scaleX);
+        _ground->setAnchorPoint(Vec2(0, 0));
+        _ground->setPosition(origin.x, origin.y);
+        auto groundBody = PhysicsBody::createBox(Size(_visibleSize.width, _groundHeight));
+        groundBody->setDynamic(false);
+        groundBody->setCategoryBitmask(0x02);
+        groundBody->setCollisionBitmask(0x01);
+        groundBody->setContactTestBitmask(0x01);
+        _ground->setPhysicsBody(groundBody);
+        this->addChild(_ground, 9);
     }
 
     _bird = Sprite::create("bird.png");

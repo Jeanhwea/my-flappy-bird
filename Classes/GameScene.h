@@ -28,7 +28,7 @@ private:
 
     GameState _gameState;
     cocos2d::Sprite* _bird;
-    cocos2d::Node* _ground;
+    cocos2d::Sprite* _ground;
     cocos2d::Node* _pipeContainer;
     cocos2d::Label* _scoreLabel;
     cocos2d::Label* _readyLabel;
