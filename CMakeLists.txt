@@ -48,10 +48,12 @@ endif()
 list(APPEND GAME_SOURCE
   Classes/AppDelegate.cpp
   Classes/HelloWorldScene.cpp
+  Classes/B2Sprite.cpp
 )
 list(APPEND GAME_HEADER
   Classes/AppDelegate.h
   Classes/HelloWorldScene.h
+  Classes/B2Sprite.h
 )
 
 if(ANDROID)
