@@ -3,7 +3,7 @@
 USING_NS_CC;
 
 const float PIPE_WIDTH = 52.0f;
-const float BIRD_RADIUS = 15.0f;
+const float BIRD_RADIUS = 20.0f;
 
 Scene* GameScene::createScene()
 {
@@ -44,6 +44,7 @@ bool GameScene::init()
         _ground->setScaleX(scaleX);
         _ground->setAnchorPoint(Vec2(0, 0));
         _ground->setPosition(origin.x, origin.y);
+        
         auto groundBody = PhysicsBody::createBox(Size(_visibleSize.width, _groundHeight));
         groundBody->setDynamic(false);
         groundBody->setCategoryBitmask(0x02);

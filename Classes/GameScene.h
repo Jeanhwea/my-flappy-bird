@@ -3,7 +3,12 @@
 
 #include "cocos2d.h"
 
-typedef enum { GAME_STATE_READY = 0, GAME_STATE_PLAYING, GAME_STATE_OVER } GameState;
+// Game State
+typedef enum {
+    GAME_STATE_READY = 0,  // Ready
+    GAME_STATE_PLAYING,    // Playing
+    GAME_STATE_OVER        // Game Over
+} GameState;
 
 class GameScene : public cocos2d::Scene
 {
