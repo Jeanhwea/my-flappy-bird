@@ -27,7 +27,7 @@ bool GameScene::init()
     _pipeSpeed = 120.0f;
     _pipeGap = 120.0f;
     _pipeSpawnInterval = 2.5f;
-    _groundHeight = 60.0f;
+    _groundHeight = 40.0f;
     _birdVelocity = 0.0f;
     _score = 0;
     _gameState = GAME_STATE_READY;
@@ -43,7 +43,7 @@ bool GameScene::init()
         float scaleX = _visibleSize.width / _ground->getContentSize().width + 0.1f;
         _ground->setScaleX(scaleX);
         _ground->setAnchorPoint(Vec2(0, 0));
-        _ground->setPosition(origin.x, origin.y);
+        _ground->setPosition(origin.x, origin.y - 20);
 
         auto groundBody = PhysicsBody::createBox(Size(_visibleSize.width, _groundHeight));
         groundBody->setDynamic(false);
