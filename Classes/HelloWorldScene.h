@@ -1,9 +1,9 @@
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
 
-#include "cocos2d.h"
-#include "Box2D/Box2D.h"
 #include "B2Sprite.h"
+#include "Box2D/Box2D.h"
+#include "cocos2d.h"
 
 #define RATIO 48.0f
 
@@ -18,7 +18,7 @@ public:
 
     CREATE_FUNC(HelloWorld);
 
-    virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *unused_event);
+    virtual void onTouchesBegan(const std::vector<cocos2d::Touch *> &touches, cocos2d::Event *unused_event);
     virtual void BeginContact(b2Contact *contact);
 
     virtual void update(float dt);

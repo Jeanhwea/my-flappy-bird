@@ -10,7 +10,9 @@ Scene *HelloWorld::createScene()
 static void problemLoading(const char *filename)
 {
     printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
+    printf(
+        "Depending on how you compiled you might have to add 'Resources/' in front of filenames in "
+        "HelloWorldScene.cpp\n");
 }
 
 bool HelloWorld::init()
@@ -84,7 +86,8 @@ void HelloWorld::addBar(float dt)
 
     b2BodyDef down_bar_body_def;
     down_bar_body_def.type = b2_kinematicBody;
-    down_bar_body_def.position = b2Vec2(screenSize.width / RATIO + 2, down_bar_size.height / RATIO / 2 + offset);
+    down_bar_body_def.position =
+        b2Vec2(screenSize.width / RATIO + 2, down_bar_size.height / RATIO / 2 + offset);
     down_bar_body_def.linearVelocity = b2Vec2(-5, 0);
     b2Body *down_bar_body = world->CreateBody(&down_bar_body_def);
 
@@ -103,7 +106,8 @@ void HelloWorld::addBar(float dt)
 
     b2BodyDef up_bar_body_def;
     up_bar_body_def.type = b2_kinematicBody;
-    up_bar_body_def.position = b2Vec2(screenSize.width / RATIO + 2, down_bar_size.height / RATIO + offset + 2 + up_bar_size.height / 2 / RATIO);
+    up_bar_body_def.position = b2Vec2(screenSize.width / RATIO + 2, down_bar_size.height / RATIO + offset +
+                                                                        2 + up_bar_size.height / 2 / RATIO);
     up_bar_body_def.linearVelocity = b2Vec2(-5, 0);
     b2Body *up_bar_body = world->CreateBody(&up_bar_body_def);
 
@@ -172,7 +176,7 @@ void HelloWorld::BeginContact(b2Contact *contact)
     }
 }
 
-void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event *unused_event)
+void HelloWorld::onTouchesBegan(const std::vector<Touch *> &touches, Event *unused_event)
 {
     bird->getB2Body()->SetLinearVelocity(b2Vec2(0, 5));
 }
