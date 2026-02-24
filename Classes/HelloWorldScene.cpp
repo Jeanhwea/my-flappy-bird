@@ -21,7 +21,7 @@ bool HelloWorld::init()
         return false;
     }
 
-    screenSize = Director::getInstance()->getVisibleSize();
+    screenSize = Director::getInstance()->getWinSize();
 
     initWorld();
     addBird();

@@ -1,32 +1,14 @@
-/* Copyright (c) 2012 Scott Lembcke and Howling Moon Software
- * Copyright (c) 2012 cocos2d-x.org
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 #include "B2Sprite.h"
-
 #include "Box2D/Box2D.h"
 
 USING_NS_CC;
 
-B2Sprite::B2Sprite() : m_bIgnoreBodyRotation(false), m_pB2Body(nullptr), m_fPTMRatio(0.0f) {}
+B2Sprite::B2Sprite()
+    : m_bIgnoreBodyRotation(false)
+    , m_pB2Body(nullptr)
+    , m_fPTMRatio(0.0f)
+    , m_bPositionDirty(true)
+{}
 
 B2Sprite* B2Sprite::create()
 {
@@ -37,7 +19,6 @@ B2Sprite* B2Sprite::create()
         delete pRet;
         pRet = nullptr;
     }
-
     return pRet;
 }
 
@@ -50,7 +31,6 @@ B2Sprite* B2Sprite::createWithTexture(Texture2D* pTexture)
         delete pRet;
         pRet = nullptr;
     }
-
     return pRet;
 }
 
@@ -63,7 +43,6 @@ B2Sprite* B2Sprite::createWithTexture(Texture2D* pTexture, const Rect& rect)
         delete pRet;
         pRet = nullptr;
     }
-
     return pRet;
 }
 
@@ -76,7 +55,6 @@ B2Sprite* B2Sprite::createWithSpriteFrame(SpriteFrame* pSpriteFrame)
         delete pRet;
         pRet = nullptr;
     }
-
     return pRet;
 }
 
@@ -89,7 +67,6 @@ B2Sprite* B2Sprite::createWithSpriteFrameName(const char* pszSpriteFrameName)
         delete pRet;
         pRet = nullptr;
     }
-
     return pRet;
 }
 
@@ -102,7 +79,6 @@ B2Sprite* B2Sprite::create(const char* pszFileName)
         delete pRet;
         pRet = nullptr;
     }
-
     return pRet;
 }
 
@@ -115,13 +91,7 @@ B2Sprite* B2Sprite::create(const char* pszFileName, const Rect& rect)
         delete pRet;
         pRet = nullptr;
     }
-
     return pRet;
-}
-
-bool B2Sprite::isDirty()
-{
-    return true;
 }
 
 bool B2Sprite::isIgnoreBodyRotation() const
@@ -134,85 +104,59 @@ void B2Sprite::setIgnoreBodyRotation(bool bIgnoreBodyRotation)
     m_bIgnoreBodyRotation = bIgnoreBodyRotation;
 }
 
-const Vec2& B2Sprite::getPosition()
+void B2Sprite::updatePosFromPhysics() const
 {
-    updatePosFromPhysics();
-    return Node::getPosition();
+    if (m_pB2Body && m_fPTMRatio > 0) {
+        b2Vec2 pos = m_pB2Body->GetPosition();
+        float x = pos.x * m_fPTMRatio;
+        float y = pos.y * m_fPTMRatio;
+        const_cast<B2Sprite*>(this)->Sprite::setPosition(Vec2(x, y));
+    }
 }
 
-void B2Sprite::getPosition(float* x, float* y)
+const Vec2& B2Sprite::getPosition() const
 {
-    updatePosFromPhysics();
-    Node::getPosition(x, y);
-}
-
-float B2Sprite::getPositionX()
-{
-    updatePosFromPhysics();
-    return _position.x;
-}
-
-float B2Sprite::getPositionY()
-{
-    updatePosFromPhysics();
-    return _position.y;
-}
-
-b2Body* B2Sprite::getB2Body() const
-{
-    return m_pB2Body;
-}
-
-void B2Sprite::setB2Body(b2Body* pBody)
-{
-    m_pB2Body = pBody;
-    pBody->SetUserData(this);
-}
-
-float B2Sprite::getPTMRatio() const
-{
-    return m_fPTMRatio;
-}
-
-void B2Sprite::setPTMRatio(float fRatio)
-{
-    m_fPTMRatio = fRatio;
-}
-
-void B2Sprite::updatePosFromPhysics()
-{
-    b2Vec2 pos = m_pB2Body->GetPosition();
-    float x = pos.x * m_fPTMRatio;
-    float y = pos.y * m_fPTMRatio;
-    _position = Vec2(x, y);
+    if (m_pB2Body) {
+        updatePosFromPhysics();
+    }
+    return Sprite::getPosition();
 }
 
 void B2Sprite::setPosition(const Vec2& pos)
 {
-    float angle = m_pB2Body->GetAngle();
-    m_pB2Body->SetTransform(b2Vec2(pos.x / m_fPTMRatio, pos.y / m_fPTMRatio), angle);
+    if (m_pB2Body) {
+        float angle = m_pB2Body->GetAngle();
+        m_pB2Body->SetTransform(b2Vec2(pos.x / m_fPTMRatio, pos.y / m_fPTMRatio), angle);
+    }
+    Sprite::setPosition(pos);
 }
 
-float B2Sprite::getRotation()
+float B2Sprite::getRotation() const
 {
-    return (m_bIgnoreBodyRotation ? Sprite::getRotation() : CC_RADIANS_TO_DEGREES(m_pB2Body->GetAngle()));
+    if (m_pB2Body && !m_bIgnoreBodyRotation) {
+        return CC_RADIANS_TO_DEGREES(m_pB2Body->GetAngle());
+    }
+    return Sprite::getRotation();
 }
 
 void B2Sprite::setRotation(float fRotation)
 {
-    if (m_bIgnoreBodyRotation) {
-        Sprite::setRotation(fRotation);
-    } else {
+    if (m_pB2Body && !m_bIgnoreBodyRotation) {
         b2Vec2 p = m_pB2Body->GetPosition();
         float radians = CC_DEGREES_TO_RADIANS(fRotation);
         m_pB2Body->SetTransform(p, radians);
+    } else {
+        Sprite::setRotation(fRotation);
     }
 }
 
 AffineTransform B2Sprite::nodeToParentTransform() const
 {
-    b2Vec2 pos = m_pB2Body->GetPosition();
+    if (!m_pB2Body) {
+        return Sprite::nodeToParentTransform();
+    }
 
+    b2Vec2 pos = m_pB2Body->GetPosition();
     float x = pos.x * m_fPTMRatio;
     float y = pos.y * m_fPTMRatio;
 
@@ -231,4 +175,27 @@ AffineTransform B2Sprite::nodeToParentTransform() const
     }
 
     return AffineTransformMake(c * _scaleX, s * _scaleX, -s * _scaleY, c * _scaleY, x, y);
+}
+
+b2Body* B2Sprite::getB2Body() const
+{
+    return m_pB2Body;
+}
+
+void B2Sprite::setB2Body(b2Body* pBody)
+{
+    m_pB2Body = pBody;
+    if (pBody) {
+        pBody->SetUserData(this);
+    }
+}
+
+float B2Sprite::getPTMRatio() const
+{
+    return m_fPTMRatio;
+}
+
+void B2Sprite::setPTMRatio(float fRatio)
+{
+    m_fPTMRatio = fRatio;
 }
