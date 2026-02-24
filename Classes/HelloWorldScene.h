@@ -7,20 +7,18 @@
 
 #define RATIO 48.0f
 
-class HelloWorld : public cocos2d::Scene
+class HelloWorld : public cocos2d::Scene, public b2ContactListener
 {
 public:
     static cocos2d::Scene *createScene();
 
     virtual bool init();
 
-    // a selector callback
     void menuCloseCallback(cocos2d::Ref *pSender);
 
-    // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 
-    virtual void ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
+    virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *unused_event);
     virtual void BeginContact(b2Contact *contact);
 
     virtual void update(float dt);
@@ -40,4 +38,4 @@ private:
     void stopGame();
 };
 
-#endif  // __HELLOWORLD_SCENE_H__
+#endif

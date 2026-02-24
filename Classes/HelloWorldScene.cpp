@@ -1,7 +1,5 @@
 #include "HelloWorldScene.h"
 
-#include "SimpleAudioEngine.h"
-
 USING_NS_CC;
 
 Scene *HelloWorld::createScene()
@@ -9,20 +7,14 @@ Scene *HelloWorld::createScene()
     return HelloWorld::create();
 }
 
-// Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char *filename)
 {
     printf("Error while loading: %s\n", filename);
-    printf(
-        "Depending on how you compiled you might have to add 'Resources/' in front of filenames in "
-        "HelloWorldScene.cpp\n");
+    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-// on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
-    //////////////////////////////
-    // 1. super init first
     if (!Scene::init()) {
         return false;
     }
@@ -34,7 +26,9 @@ bool HelloWorld::init()
     addBarContainer();
     addGround();
 
-    setTouchEnabled(true);
+    auto touchListener = EventListenerTouchAllAtOnce::create();
+    touchListener->onTouchesBegan = CC_CALLBACK_2(HelloWorld::onTouchesBegan, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     scheduleOnce(schedule_selector(HelloWorld::startGame), 3);
 
@@ -62,7 +56,7 @@ void HelloWorld::stopGame()
 void HelloWorld::addBird()
 {
     bird = B2Sprite::create("bird.png");
-    CCSize size = bird->getContentSize();
+    Size size = bird->getContentSize();
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
@@ -85,14 +79,12 @@ void HelloWorld::addBar(float dt)
 {
     float offset = -rand() % 5;
 
-    // down bar
     B2Sprite *down_bar = B2Sprite::create("down_bar.png");
-    CCSize down_bar_size = down_bar->getContentSize();
+    Size down_bar_size = down_bar->getContentSize();
 
     b2BodyDef down_bar_body_def;
     down_bar_body_def.type = b2_kinematicBody;
-    down_bar_body_def.position =
-        b2Vec2(screenSize.width / RATIO + 2, down_bar_size.height / RATIO / 2 + offset);
+    down_bar_body_def.position = b2Vec2(screenSize.width / RATIO + 2, down_bar_size.height / RATIO / 2 + offset);
     down_bar_body_def.linearVelocity = b2Vec2(-5, 0);
     b2Body *down_bar_body = world->CreateBody(&down_bar_body_def);
 
@@ -106,14 +98,12 @@ void HelloWorld::addBar(float dt)
     down_bar->setPTMRatio(RATIO);
     barContainer->addChild(down_bar);
 
-    // up bar
     B2Sprite *up_bar = B2Sprite::create("up_bar.png");
-    CCSize up_bar_size = up_bar->getContentSize();
+    Size up_bar_size = up_bar->getContentSize();
 
     b2BodyDef up_bar_body_def;
     up_bar_body_def.type = b2_kinematicBody;
-    up_bar_body_def.position = b2Vec2(screenSize.width / RATIO + 2, down_bar_size.height / RATIO + offset +
-                                                                        2 + up_bar_size.height / 2 / RATIO);
+    up_bar_body_def.position = b2Vec2(screenSize.width / RATIO + 2, down_bar_size.height / RATIO + offset + 2 + up_bar_size.height / 2 / RATIO);
     up_bar_body_def.linearVelocity = b2Vec2(-5, 0);
     b2Body *up_bar_body = world->CreateBody(&up_bar_body_def);
 
@@ -130,14 +120,14 @@ void HelloWorld::addBar(float dt)
 
 void HelloWorld::addBarContainer()
 {
-    barContainer = CCSprite::create();
+    barContainer = Sprite::create();
     addChild(barContainer);
 }
 
 void HelloWorld::addGround()
 {
     B2Sprite *ground = B2Sprite::create("ground.png");
-    CCSize size = ground->getContentSize();
+    Size size = ground->getContentSize();
 
     b2BodyDef bDef;
     bDef.type = b2_staticBody;
@@ -158,12 +148,12 @@ void HelloWorld::addGround()
 void HelloWorld::update(float dt)
 {
     world->Step(dt, 8, 3);
-    CCSprite *s;
+    Sprite *s;
 
-    for (b2Body *b = world->GetBodyList(); b != NULL; b = b->GetNext()) {
+    for (b2Body *b = world->GetBodyList(); b != nullptr; b = b->GetNext()) {
         if (b->GetPosition().x < -3) {
-            s = (CCSprite *)b->GetUserData();
-            if (s != NULL) {
+            s = (Sprite *)b->GetUserData();
+            if (s != nullptr) {
                 s->removeFromParent();
             }
 
@@ -178,24 +168,16 @@ void HelloWorld::BeginContact(b2Contact *contact)
         contact->GetFixtureB()->GetBody()->GetUserData() == bird) {
         stopGame();
 
-        CCMessageBox("游戏失败", "游戏失败");
+        ccMessageBox("游戏失败", "游戏失败");
     }
 }
 
-void HelloWorld::ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent)
+void HelloWorld::onTouchesBegan(const std::vector<Touch*>& touches, Event *unused_event)
 {
     bird->getB2Body()->SetLinearVelocity(b2Vec2(0, 5));
 }
 
 void HelloWorld::menuCloseCallback(Ref *pSender)
 {
-    // Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();
-
-    /* To navigate back to native iOS screen(if present) without quitting the application  ,do not use
-     * Director::getInstance()->end() as given above,instead trigger a custom event created in
-     * RootViewController.mm as below */
-
-    // EventCustom customEndEvent("game_scene_close_event");
-    // _eventDispatcher->dispatchEvent(&customEndEvent);
 }
