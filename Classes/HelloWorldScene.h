@@ -5,7 +5,7 @@
 #include "Box2D/Box2D.h"
 #include "cocos2d.h"
 
-#define RATIO 48.0f
+#define RATIO 32.0f
 
 class HelloWorld : public cocos2d::Scene, public b2ContactListener
 {
