@@ -19,12 +19,40 @@ then
     exit
 fi
 
+# Check if cmake is installed
+if ! command -v cmake &> /dev/null; then
+    echo "cmake could not be found"
+    exit 1
+fi
+
+# Check if Xcode is installed
+if ! command -v xcode-select &> /dev/null; then
+    echo "Xcode could not be found"
+    exit 1
+fi
+
+# Check if macdeployqt is installed
+if ! command -v macdeployqt &> /dev/null; then
+    echo "macdeployqt could not be found"
+    exit 1
+fi
+
 # Display cmake version
 cmake --version
 
-cmake -B output -G"Xcode" --log-level=STATUS
+# Build application
+cmake -B ${OUT_DIR} -G"Xcode" --log-level=STATUS
+if [ $? -ne 0 ]; then
+    echo "cmake configuration failed"
+    exit 1
+fi
 
-cmake --build output --config Release
+# Release application with Xcode
+cmake --build ${OUT_DIR} --config Release
+if [ $? -ne 0 ]; then
+    echo "cmake build failed"
+    exit 1
+fi
 
 mkdir -p ${DMG_DIR}
 mv ${OUT_DIR}/bin/${APP_PKG}/Release/${APP_PKG}.app ${DMG_DIR}
