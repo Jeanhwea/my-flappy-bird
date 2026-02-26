@@ -132,6 +132,8 @@ void GameScene::update(float dt)
     rotation = clampf(rotation, -45.0f, 45.0f);
     _bird->setRotation(rotation);
 
+    std::vector<Node*> pipesToRemove;
+
     for (auto& pipe : _pipeContainer->getChildren()) {
         Vec2 pipePos = pipe->getPosition();
         pipePos.x -= _pipeSpeed * dt;
@@ -145,8 +147,13 @@ void GameScene::update(float dt)
         }
 
         if (pipePos.x < -PIPE_WIDTH) {
-            pipe->removeFromParent();
+            pipesToRemove.push_back(pipe);
         }
+    }
+
+    // 统一删除管道
+    for (auto pipe : pipesToRemove) {
+        pipe->removeFromParent();
     }
 
     _lastPipeSpawnTime += dt;
