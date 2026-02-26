@@ -210,7 +210,7 @@ void GameScene::spawnPipe()
 
     float bottomHeight = minHeight;
     if (diffHeight > 0) {
-        float bottomHeight = minHeight + (rand() % diffHeight);
+        bottomHeight = minHeight + (rand() % diffHeight);
     }
 
     auto bottomPipe = Sprite::create("down_bar.png");
