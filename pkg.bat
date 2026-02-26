@@ -36,13 +36,12 @@ cmake --build %OUT_DIR% --config Release
 :: Create output directory
 mkdir "%DST_DIR%" 2>nul
 
-:: Copy build result to output directory
-if exist "%OUT_DIR%\Release\%APP_PKG%.exe" (
-    copy "%OUT_DIR%\Release\%APP_PKG%.exe" "%DST_DIR%"
-) else (
-    echo Build failed: %APP_PKG%.exe not found
-    exit /b 1
-)
+
+:: Create zip package
+set ZIP_NAME=%APP_PKG%-%OS_NAME%-%OS_ARCH%-%GIT_TAG%.zip
+powershell -Command "Compress-Archive -Path '%DST_DIR%\bin\%APP_PKG%\Release\*' -DestinationPath '%DST_DIR%\%ZIP_NAME%' -Force"
+
+echo Created zip package: %ZIP_NAME%
 
 :: Clean up temporary directory
 rmdir /s /q "%OUT_DIR%" 2>nul
