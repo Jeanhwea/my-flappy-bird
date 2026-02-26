@@ -197,9 +197,14 @@ bool GameScene::onContactBegin(PhysicsContact& contact)
 void GameScene::spawnPipe()
 {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    float minHeight = 80.0f;
+    float minHeight = 60.0f;
     float maxHeight = _visibleSize.height - _groundHeight - _pipeGap - minHeight;
-    float bottomHeight = minHeight + (rand() % (int)(maxHeight - minHeight));
+    int diffHeight = (int)(maxHeight - minHeight);
+
+    float bottomHeight = minHeight;
+    if (diffHeight > 0) {
+        float bottomHeight = minHeight + (rand() % diffHeight);
+    }
 
     auto bottomPipe = Sprite::create("down_bar.png");
     if (bottomPipe) {
