@@ -31,12 +31,6 @@ if ! command -v xcode-select &> /dev/null; then
     exit 1
 fi
 
-# Check if macdeployqt is installed
-if ! command -v macdeployqt &> /dev/null; then
-    echo "macdeployqt could not be found"
-    exit 1
-fi
-
 # Display cmake version
 cmake --version
 
