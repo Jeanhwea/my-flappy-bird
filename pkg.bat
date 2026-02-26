@@ -39,7 +39,7 @@ mkdir "%DST_DIR%" 2>nul
 
 :: Create zip package
 set ZIP_NAME=%APP_PKG%-%OS_NAME%-%OS_ARCH%-%GIT_TAG%.zip
-powershell -Command "Compress-Archive -Path '%DST_DIR%\bin\%APP_PKG%\Release\*' -DestinationPath '%DST_DIR%\%ZIP_NAME%' -Force"
+powershell -Command "Compress-Archive -Path '%OUT_DIR%\bin\%APP_PKG%\Release\*' -DestinationPath '%DST_DIR%\%ZIP_NAME%' -Force"
 
 echo Created zip package: %ZIP_NAME%
 
