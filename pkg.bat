@@ -28,7 +28,7 @@ if %errorlevel% neq 0 (
 cmake --version
 
 :: Generate Visual Studio project using cmake
-cmake -B %OUT_DIR% -G"Visual Studio 17 2022" --log-level=STATUS
+cmake -B %OUT_DIR% -G"Visual Studio 17 2022" -A win32 --log-level=STATUS
 
 :: Build the project
 cmake --build %OUT_DIR% --config Release
