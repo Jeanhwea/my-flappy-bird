@@ -1,32 +1,42 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: 设置变量
-for /f "tokens=*" %%i in ('git describe --tags --always --dirty="+dev"') do set GIT_TAG=%%i
+echo Starting application packaging...
+
+:: Get Git tag
+git describe --tags --always --dirty="+dev" > git_tag.tmp
+set /p GIT_TAG=<git_tag.tmp
+del git_tag.tmp
+
+:: Get operating system information
+set OS_NAME=Windows
+set OS_ARCH=x86_64
+
+:: Set output directory
 set OUT_DIR=output
 set DST_DIR=dist
 set APP_PKG=my-flappy-bird
 
-:: 检查 cmake 是否安装
+:: Check if cmake is installed
 cmake --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo cmake could not be found
     exit /b 1
 )
 
-:: 显示 cmake 版本
+:: Display cmake version
 cmake --version
 
-:: 使用 cmake 生成 Visual Studio 项目
+:: Generate Visual Studio project using cmake
 cmake -B %OUT_DIR% -G"Visual Studio 17 2022" --log-level=STATUS
 
-:: 构建项目
+:: Build the project
 cmake --build %OUT_DIR% --config Release
 
-:: 创建输出目录
+:: Create output directory
 mkdir "%DST_DIR%" 2>nul
 
-:: 复制构建结果到输出目录
+:: Copy build result to output directory
 if exist "%OUT_DIR%\Release\%APP_PKG%.exe" (
     copy "%OUT_DIR%\Release\%APP_PKG%.exe" "%DST_DIR%"
 ) else (
@@ -34,7 +44,7 @@ if exist "%OUT_DIR%\Release\%APP_PKG%.exe" (
     exit /b 1
 )
 
-:: 清理临时目录
+:: Clean up temporary directory
 rmdir /s /q "%OUT_DIR%" 2>nul
 
 echo Packaging completed successfully!
